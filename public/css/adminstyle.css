@@ -1,0 +1,7 @@
+.sorting tr:not(.home){
+    cursor: pointer;
+}
+
+.ui-state-highlight {
+    border: 1px solid rgb(150, 52, 52);
+}
