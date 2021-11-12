@@ -4,13 +4,12 @@
 <a href="/admin/categories" class="btn btn-primary">Back to all categories</a>
 <br><br>
 
-<form method="Post" action="/admin/categories/edit-category/<%= slug %>">
+<form method="Post" action="/admin/categories/edit-category/<%= id %>">
 
     <div class="form-group">
         <label for="title">Title</label>
         <input class="form-control" type="text" name="title" required minlength="3" value="<%= title %>" placeholder="title">
     </div>
-    <input type="hidden" name="id" value="<%= id %>">
     <button class="btn btn-default">Submit</button>
 </form>
 

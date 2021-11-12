@@ -17,7 +17,7 @@
         <% pages.forEach(function(p){%>
         <tr id='id_<%= p._id %>' class="<%= p.slug %>">
             <td><%= p.title %></td>
-            <td><a href="/admin/pages/edit-page/<%= p.slug %>">Edit</a></td>
+            <td><a href="/admin/pages/edit-page/<%= p._id %>">Edit</a></td>
             <% if(p.slug == 'home') { %>
                 <td></td>
             <% } else { %>

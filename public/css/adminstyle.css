@@ -5,3 +5,9 @@
 .ui-state-highlight {
     border: 1px solid rgb(150, 52, 52);
 }
+
+#imgPreview { 
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+}

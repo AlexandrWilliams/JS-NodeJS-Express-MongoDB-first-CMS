@@ -70,26 +70,25 @@ router.post('/add-category', (req,res)=>{
 });
 
 //Get Edit Category
-router.get('/edit-category/:slug', (req,res)=>{
-    Category.findOne({slug: req.params.slug}, (err, cat)=>{
+router.get('/edit-category/:id', (req,res)=>{
+    Category.findById(req.params.id, (err, cat)=>{
         if(err) return console.log(err);
 
         res.render('admin/edit_category', {
             title: cat.title,
-            slug: cat.slug,
             id: cat._id
         });
     })
 });
 
 //Post edited category
-router.post('/edit-category/:slug', (req,res)=>{
+router.post('/edit-category/:id', (req,res)=>{
     
     req.checkBody('title', 'Title must have value.').notEmpty();
 
     const title = req.body.title;
     let slug = title.replace(/\s+/g, '-').toLowerCase();
-    const id = req.body.id;
+    const id = req.params.id;
 
     const err  = req.validationErrors();
 
@@ -124,7 +123,7 @@ router.post('/edit-category/:slug', (req,res)=>{
                         if(err) return console.log(err);
     
                         req.flash('success', 'Category changes applied succesfully!');
-                        res.redirect('/admin/categories/edit-category/' + cat.slug);
+                        res.redirect('/admin/categories/edit-category/' + cat.id);
                     });
                 })
             }
