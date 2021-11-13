@@ -8,6 +8,18 @@
 
 #imgPreview { 
     margin: 20px;
-    width: 200px;
+}
+
+#noimage {
+    width: auto;
     height: 200px;
+}
+
+ul.gallery li:firts-child {
+    margin-left: 0;
+}
+ul.gallery li{
+    margin: 20px;
+    display: inline-block;
+    list-style: none;
 }
