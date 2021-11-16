@@ -5,6 +5,18 @@ const router = express.Router();
 //get Category model
 const Category = require('../models/category');
 
+//Reset Locals Categories
+function resetLocals(req) {
+    return Category.find({}).sort({sorting: 1}).exec(function(err,cats){
+        if (err) {
+          console.log(err);
+          res.send('Internal Server Error! Please Try again!')
+        } else {
+          req.app.locals.cats = cats;
+        }
+    })
+};
+
 //Get Categories Index
 router.get('/', (req,res)=>{
     Category.find(function(err,cat){
@@ -60,6 +72,9 @@ router.post('/add-category', (req,res)=>{
 
                 newCat.save(function(err){
                     if(err) return console.log(err);
+
+                    //adding to local variable
+                    resetLocals(req);
 
                     req.flash('success', 'Category Added!');
                     res.redirect('/admin/categories');
@@ -121,7 +136,10 @@ router.post('/edit-category/:id', (req,res)=>{
 
                     cat.save(function(err){
                         if(err) return console.log(err);
-    
+
+                        //adding to local variable
+                        resetLocals(req);
+
                         req.flash('success', 'Category changes applied succesfully!');
                         res.redirect('/admin/categories/edit-category/' + cat.id);
                     });
@@ -135,6 +153,10 @@ router.post('/edit-category/:id', (req,res)=>{
 router.get('/delete-category/:id', (req,res)=>{
     Category.findByIdAndRemove(req.params.id, function(err){
         if(err) return console.log(err);
+
+        //adding to local variable
+        resetLocals(req);
+
         req.flash('success', 'Category deleted succesfully!');
         res.redirect('/admin/categories/');
     });

@@ -26,6 +26,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Set global variable
 app.locals.err = null;
 
+//Get Page Model
+const Page = require('./models/page');
+//Get all pages and pass to header.ejs
+Page.find({}).sort({sorting: 1}).exec(function(err,pages){
+  if (err) {
+    console.log(err);
+    res.send('Internal Server Error! Please Try again!')
+  } else {
+    app.locals.pages = pages;
+  }
+});
+
+//Get Category Model
+const Category = require('./models/category');
+//Get all pages and pass to header.ejs
+Category.find({}).sort({sorting: 1}).exec(function(err,cat){
+  if (err) {
+    console.log(err);
+    res.send('Internal Server Error! Please Try again!')
+  } else {
+    app.locals.cats = cat;
+  }
+});
+
 //Express file upload middleware
 app.use(fileUpload());
 
@@ -84,15 +108,25 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.get('*', function (req, res, next) {
+  res.locals.cart = req.session.cart;
+  next();  
+});
+
 //Routes
+const products = require('./routes/products');
+const cart = require('./routes/cart');
 const pages = require('./routes/pages');
 const adminPages = require('./routes/admin_pages');
 const adminCategories = require('./routes/admin_categories');
 const adminProducts = require('./routes/admin_products');
+const { get } = require('http');
 
 app.use('/admin/pages', adminPages);
 app.use('/admin/categories', adminCategories);
 app.use('/admin/products', adminProducts);
+app.use('/products', products);
+app.use('/cart', cart);
 app.use('/', pages);
 
 //Start server

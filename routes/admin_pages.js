@@ -5,6 +5,18 @@ const router = express.Router();
 //get Page model
 const Page = require('../models/page');
 
+//Reset Locals Pages
+function resetLocals(req) {
+    return Page.find({}).sort({sorting: 1}).exec(function(err,pages){
+        if (err) {
+          console.log(err);
+          res.send('Internal Server Error! Please Try again!')
+        } else {
+          req.app.locals.pages = pages;
+        }
+    })
+};
+
 //Get Pages Index
 router.get('/', (req,res)=>{
     Page.find({}).sort({sorting: 1}).exec(function(err,pages){
@@ -70,6 +82,8 @@ router.post('/add-page', (req,res)=>{
 
                 page.save(function(err){
                     if(err) return console.log(err);
+                    //adding to local variable
+                    resetLocals(req);
 
                     req.flash('success', 'Page Added!');
                     res.redirect('/admin/pages');
@@ -96,6 +110,8 @@ router.post('/reorder-pages', (req,res)=>{
                     if(err) {
                         return console.log(err)
                     }
+                    //adding to local variable
+                    resetLocals(req);
                 });
             })
         }) (count);
@@ -162,7 +178,10 @@ router.post('/edit-page/:id', (req,res)=>{
 
                     page.save(function(err){
                         if(err) return console.log(err);
-    
+                        
+                        //adding to local variable
+                        resetLocals(req);
+
                         req.flash('success', 'Page changes applied succesfully!');
                         res.redirect('/admin/pages/edit-page/' + id);
                     });
@@ -176,6 +195,10 @@ router.post('/edit-page/:id', (req,res)=>{
 router.get('/delete-page/:id', (req,res)=>{
     Page.findByIdAndRemove(req.params.id, function(err){
         if(err) return console.log(err);
+
+        //adding to local variable
+        resetLocals(req);
+
         req.flash('success', 'Page deleted succesfully!');
         res.redirect('/admin/pages/');
     });
